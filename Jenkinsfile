@@ -3,7 +3,11 @@ pipeline {
 	stages {
 		stage("Pull Latest Image") { 
 			steps {
-				sh "docker pull btakuski/selenium-docker"
+				    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "docker login --username=${user} --password=${pass}"
+                    sh "docker pull btakuski/selenium-docker:latest"
+                }
+				
 			}
 		}
 		stage("Starting Grid") {
