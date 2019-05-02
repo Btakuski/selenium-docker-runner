@@ -1,0 +1,41 @@
+version: "3"
+services:
+  hub:
+    image: selenium/hub:3.14.0-gallium
+    ports:
+      - "4444:4444"
+  chrome:
+    image: selenium/node-chrome:3.14.0-gallium
+    depends_on:
+      - hub
+    environment:
+      - HUB_HOST=hub
+  firefox:
+    image: selenium/node-firefox:3.14.0-gallium
+    shm_size: '1gb'
+    depends_on:
+      - hub
+    environment:
+      - HUB_HOST=hub
+  home-page-module:
+    image: btakuski/selenium-docker
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - HUB_HOST=hub
+      - BROWSER=chrome
+      - MODULE=home-page-module.xml
+    volumes:
+      - ./home-page-result:/usr/share/selenium-docker/test-output
+  sign-in-module:
+    image: btakuski/selenium-docker
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - HUB_HOST=hub
+      - BROWSER=firefox
+      - MODULE=sign-in-module.xml
+    volumes:
+      - ./sign-in-result:/usr/share/selenium-docker/test-output
