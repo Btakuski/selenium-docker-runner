@@ -11,11 +11,11 @@ pipeline {
 				sh "docker-compose up --no-color home-page-module sign-in-module"
 			}
 		}
-
-		stage("Stop Grid") {
-			steps {
-				sh "docker-compose down"
-			}
+	}
+	post { 
+		always {
+			archiveArtifacts artifacts: 'output/**'
+			sh "docker-compose down"
 		}
 	}
 }
