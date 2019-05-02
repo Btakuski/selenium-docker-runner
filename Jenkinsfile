@@ -1,6 +1,11 @@
 pipeline {
 	agent any 
 	stages {
+		stage("Pull Latest Image") { 
+			steps {
+				sh "docker pull btakuski/selenium-docker"
+			}
+		}
 		stage("Starting Grid") {
 			steps {
 				sh "docker-compose up -d hub chrome firefox"
